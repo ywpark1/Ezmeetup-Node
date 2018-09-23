@@ -1,0 +1,16 @@
+{
+    "name": "Ezmeetup API Server - Development",
+    "dbConfig" : {
+        "database": "ezmeetup",
+        "host": "localhost",
+        "dialect": "mysql",
+        "username": "root1",
+        "pool": {
+            "max": 10,
+            "min": 0,
+            "acquire": 30000,
+            "idle": 10000
+        },
+        "operatorsAliases": false
+    }
+}

@@ -1,0 +1,9 @@
+{
+    "name": "Ezmeetup API Server - Production",
+    "dbConfig" : {
+        "host": "localhost",
+        "dialect": "mysql",
+        "user": "root1",
+        "database": "ezmeetup"
+    }
+}

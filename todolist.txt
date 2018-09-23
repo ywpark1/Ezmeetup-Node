@@ -1,0 +1,15 @@
+apiDoc
+
+Log Error
+
+Models :
+    User
+    Event
+    Friend
+    Chat(Takes long time)
+
+API :
+    User
+    Event
+    Friend
+    Chat(Takes long time)
