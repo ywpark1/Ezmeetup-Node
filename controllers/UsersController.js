@@ -1,20 +1,33 @@
 // const connection = require('../startup/dbconnection');
+const _ = require('lodash');
+// const jwt = require('jsonwebtoken');
 const db = require('../startup/dbconnection');
+// const config = require('config');
 const User = db.users;
 
 // Create new user
 exports.create = (req, res) => {
     User.create({ 
-        email: "test1@test.ca",
-        password: "Password1", 
-        firstName: "Firstname 1",
-        lastName: "Lastname 1",
-        phoneNumber: "123-456-7890"
+        email: req.body.email,
+        password: req.body.password, 
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        phoneNumber: req.body.phoneNumber
       }).then(user => {		
           // Send created user to client
-          res.status(201).send(user);
+        //   const payload = {
+        //       id: user.id,
+        //       email: user.email,
+        //       admin: user.isAdmin
+        //   };
+
+        //   const token = jwt.sign(payload, config.get('jwtPrivateKey'));
+
+            const token = user.generateAuthToken();
+
+            res.header('x-auth-token', token).status(201).send(_.pick(user, ['email', 'firstName', 'lastName', 'phoneNumber']));
       }).catch(err => {
-          res.status(400).send(err.errors[0].message);
+            res.status(400).send(err);
       });
 };
 
@@ -30,7 +43,11 @@ exports.findAll = (req, res) => {
 
 // Find a User by Id
 exports.findById = (req, res) => {	
-    User.findById(req.params.userId)
+    User.findOne({ where: {id: req.params.userId } }, {
+        attributes: {
+            exclude: ['password']
+        }
+    })
         .then(user => {
             if(!user){
                 res.status(404).send('User not found');
