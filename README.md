@@ -26,9 +26,9 @@ Also, git should be installed.
 Create an empty directory, change the directory to new directory, and clone the repo to local machine. For example,
 
 ```
-mkdir ezmeetup-repo
-cd ezmeetup-repo
-git clone https://YOUR_NAME@bitbucket.org/ezmeetup/ezmeetup.git
+mkdir ezmeetup-node
+cd ezmeetup-node
+git clone https://github.com/ywpark1/Ezmeetup-Node.git
 ```
 
 And run the following codes :
@@ -65,7 +65,6 @@ Change the DB settings under config directory.
  
 ## Authors
 
-* Alexei Bonilla
 * Derrick Leung (Group Leader)
 * Sina Kamali
 * Yeonwoo Park
@@ -79,6 +78,8 @@ Change the DB settings under config directory.
 * Check all queries before creating the table in DB
 
 * Add user roles to User
+
+* Authenticate User(JWT and Passport)
 
 * Models :
     * User
