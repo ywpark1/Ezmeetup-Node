@@ -12,7 +12,8 @@ exports.create = (req, res) => {
         password: req.body.password, 
         firstName: req.body.firstName,
         lastName: req.body.lastName,
-        phoneNumber: req.body.phoneNumber
+        phoneNumber: req.body.phoneNumber,
+        isAdmin: true
       }).then(user => {		
           // Send created user to client
         //   const payload = {
@@ -25,7 +26,8 @@ exports.create = (req, res) => {
 
             const token = user.generateAuthToken();
 
-            res.header('x-auth-token', token).status(201).send(_.pick(user, ['email', 'firstName', 'lastName', 'phoneNumber']));
+            // res.header('x-auth-token', token).status(201).send(_.pick(user, ['email', 'firstName', 'lastName', 'phoneNumber']));
+            res.header('x-auth-token', token).status(201).send(user);
       }).catch(err => {
             res.status(400).send(err);
       });

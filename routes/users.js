@@ -5,7 +5,11 @@ const router = express.Router();
 
 const userController = require('../controllers/UsersController');
 
-router.get('/', userController.findAll);
+// Middleware
+const auth = require('../middleware/auth');
+const admin = require('../middleware/admin');
+
+router.get('/', [auth, admin], userController.findAll);
 router.post('/', userController.create);
 // router.post('/login', userController.login);
 router.get('/:userId', userController.findById);

@@ -60,7 +60,7 @@ module.exports = (sequelize, Sequelize) => {
         const payload = {
             id: this.id,
             email: this.email,
-            admin: this.isAdmin
+            isAdmin: this.isAdmin
         };
 
         const token = jwt.sign(payload, config.get('jwtPrivateKey'));
