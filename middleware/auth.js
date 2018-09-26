@@ -22,9 +22,11 @@ const localStrategy = require('passport-local').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('../startup/dbconnection').users;
+const UserActivity = require('../startup/dbconnection').useractivities;
+
 const config = require('config');
 
-// Passport middleware to handle login
+// login Passport
 passport.use(new localStrategy({
     usernameField: 'email',
     passwordField: 'password'
@@ -35,9 +37,13 @@ passport.use(new localStrategy({
 
         if (!user) {
             return done(null, false, { message: 'Invalid email or password' });
-        } else if(!user.validPassword(password)) {
+        } else if (!user.validPassword(password)) {
             return done(null, false, { message: 'Invalid email or password' });
         }
+
+        user.update({
+            loginStatus: true
+        });
 
         return done(null, user, { message: 'Logged in Successfully' });
     } catch (error) {
@@ -45,6 +51,7 @@ passport.use(new localStrategy({
     }
 }));
 
+// Authenticate Passport
 const opts = {
     jwtFromRequest: ExtractJwt.fromHeader('x-auth-token'),
     secretOrKey: config.get('jwtPrivateKey')
@@ -52,9 +59,18 @@ const opts = {
 
 passport.use(new JwtStrategy(opts, async (payload, done) => {
     try {
+        // const user = await User.findOne({
+        //     where: { id: payload.id },
+        //     include: [
+        //         { model: UserActivity }
+        //     ]
+        // });
+
         const user = await User.findById(payload.id);
 
-        if(!user) {
+        if (!user) {
+            return done(null, false);
+        } else if(!user.loginStatus) {
             return done(null, false);
         }
 

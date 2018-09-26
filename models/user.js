@@ -37,11 +37,11 @@ module.exports = (sequelize, Sequelize) => {
         isAdmin: {
             type: Sequelize.BOOLEAN,
             defaultValue: 0
+        },
+        loginStatus: {
+            type: Sequelize.BOOLEAN,
+            defaultValue: 0
         }
-        // loginStatus: {
-        //     type: Sequelize.BOOLEAN,
-        //     defaultValue: 0
-        // }
     };
 
     const User = sequelize.define('user', userSchema, {});
@@ -60,6 +60,7 @@ module.exports = (sequelize, Sequelize) => {
         const payload = {
             id: this.id,
             email: this.email,
+            loginStatus: this.loginStatus,
             isAdmin: this.isAdmin
         };
 

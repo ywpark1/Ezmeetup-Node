@@ -22,9 +22,9 @@ router.get('/:userId', userController.findById);
 router.put('/:userId', userController.update);
 router.delete('/:userId', userController.delete);
 
-router.get('/hello', authJwt, (req, res) => {
-    res.send('This is a private route!!!!');
-});
+// router.get('/hello', authJwt, (req, res) => {
+//     res.send('This is a private route!!!!');
+// });
 
 
 module.exports = router;

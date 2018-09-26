@@ -4,25 +4,39 @@ const _ = require('lodash');
 const db = require('../startup/dbconnection');
 // const config = require('config');
 const User = db.users;
+const UserActivity = db.useractivities;
 
 // Create new user
 exports.create = (req, res) => {
-    User.create({ 
+    // UserActivity.create({
+    //     user: {
+    //         email: req.body.email,
+    //         password: req.body.password,
+    //         firstName: req.body.firstName,
+    //         lastName: req.body.lastName,
+    //         phoneNumber: req.body.phoneNumber,
+    //         isAdmin: true
+    //     }
+    // }, { include: [ User ] })
+    // .then(user => {
+    //     res.status(201).send(user);
+    // }).catch(err => {
+    //     res.status(400).send(err);
+    // });
+
+    User.create({
         email: req.body.email,
-        password: req.body.password, 
+        password: req.body.password,
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         phoneNumber: req.body.phoneNumber,
         isAdmin: true
-      }).then(user => {		
-            // const token = user.generateAuthToken();
+    }).then(user => {
 
-            // // res.header('x-auth-token', token).status(201).send(_.pick(user, ['email', 'firstName', 'lastName', 'phoneNumber']));
-            // res.header('x-auth-token', token).status(201).send(user);
-            res.status(201).send(user);
-      }).catch(err => {
-            res.status(400).send(err);
-      });
+        res.status(201).send(user);
+    }).catch(err => {
+        res.status(400).send(err);
+    });
 };
 
 // Display list of all Users.
@@ -36,14 +50,14 @@ exports.findAll = (req, res) => {
 };
 
 // Find a User by Id
-exports.findById = (req, res) => {	
-    User.findOne({ where: {id: req.params.userId } }, {
+exports.findById = (req, res) => {
+    User.findOne({ where: { id: req.params.userId } }, {
         attributes: {
             exclude: ['password']
         }
     })
         .then(user => {
-            if(!user){
+            if (!user) {
                 res.status(404).send('User not found');
             } else {
                 res.status(200).send(user);
@@ -55,23 +69,23 @@ exports.findById = (req, res) => {
 
 // Update User info
 exports.update = (req, res) => {
-	const id = req.params.customerId;
-	User.update(
+    const id = req.params.customerId;
+    User.update(
         { firstname: req.body.firstname, lastname: req.body.lastname, age: req.body.age },
-        { where: {id: req.params.customerId} }
+        { where: { id: req.params.customerId } }
     ).then(() => {
         res.status(200).send("Updated successfully a user with id = " + id);
     });
 };
- 
+
 // Delete a User by Id
 exports.delete = (req, res) => {
-	const id = req.params.customerId;
-	User.destroy({
-	  where: { id: id }
-	}).then(() => {
-	  res.status(200).send('deleted successfully a User with id = ' + id);
-	});
+    const id = req.params.customerId;
+    User.destroy({
+        where: { id: id }
+    }).then(() => {
+        res.status(200).send('deleted successfully a User with id = ' + id);
+    });
 };
 
 
@@ -79,8 +93,8 @@ exports.login = (req, res, next) => {
 
     const token = req.user.generateAuthToken();
 
-    res.header('x-auth-token', token).status(200).send(_.pick(req.user, ['id', 'email']));
+    res.header('x-auth-token', token).status(200).send(_.pick(req.user, ['id', 'email', 'loginStatus']));
     // res.status(200).send(req.user);
-    
+
     return next();
 }
