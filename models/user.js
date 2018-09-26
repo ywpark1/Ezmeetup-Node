@@ -63,7 +63,8 @@ module.exports = (sequelize, Sequelize) => {
             isAdmin: this.isAdmin
         };
 
-        const token = jwt.sign(payload, config.get('jwtPrivateKey'), { expiresIn: config.get('tokenExp') }); // expires in seconds
+        // const token = jwt.sign(payload, config.get('jwtPrivateKey'), { expiresIn: config.get('tokenExp') }); // expires in seconds
+        const token = jwt.sign(payload, config.get('jwtPrivateKey')); // expires in seconds
 
         return token;
     }
