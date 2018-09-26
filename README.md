@@ -81,6 +81,8 @@ Change the DB settings under config directory.
 
 * Authenticate User(JWT and Passport)
 
+* Form Validator
+
 * Models :
     * User
     * Event

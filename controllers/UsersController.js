@@ -15,19 +15,11 @@ exports.create = (req, res) => {
         phoneNumber: req.body.phoneNumber,
         isAdmin: true
       }).then(user => {		
-          // Send created user to client
-        //   const payload = {
-        //       id: user.id,
-        //       email: user.email,
-        //       admin: user.isAdmin
-        //   };
+            // const token = user.generateAuthToken();
 
-        //   const token = jwt.sign(payload, config.get('jwtPrivateKey'));
-
-            const token = user.generateAuthToken();
-
-            // res.header('x-auth-token', token).status(201).send(_.pick(user, ['email', 'firstName', 'lastName', 'phoneNumber']));
-            res.header('x-auth-token', token).status(201).send(user);
+            // // res.header('x-auth-token', token).status(201).send(_.pick(user, ['email', 'firstName', 'lastName', 'phoneNumber']));
+            // res.header('x-auth-token', token).status(201).send(user);
+            res.status(201).send(user);
       }).catch(err => {
             res.status(400).send(err);
       });
@@ -81,3 +73,14 @@ exports.delete = (req, res) => {
 	  res.status(200).send('deleted successfully a User with id = ' + id);
 	});
 };
+
+
+exports.login = (req, res, next) => {
+
+    const token = req.user.generateAuthToken();
+
+    res.header('x-auth-token', token).status(200).send(_.pick(req.user, ['id', 'email']));
+    // res.status(200).send(req.user);
+    
+    return next();
+}

@@ -26,6 +26,10 @@ exports.login = (req, res) => {
         });
 };
 
+// export.login = (req, res) => {
+//     res.status(200).send(req.user);
+// }
+
 exports.logout = (req, res) => {	
     User.findOne({ where: {email: req.body.email } })
         .then(user => {
