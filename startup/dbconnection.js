@@ -3,7 +3,7 @@
 const Sequelize = require('sequelize');
 const config = require('config');
 const UserModel = require('../models/user');
-const UserActivityModel = require('../models/userActivity');
+const EventModel = require('../models/event');
 
 const sequelize = new Sequelize(config.get('dbConfig'));
 const db = {};
@@ -14,7 +14,6 @@ db.sequelize = sequelize;
 
 /* Model/tables */
 db.users = UserModel(sequelize, Sequelize);
-db.useractivities = UserActivityModel(sequelize, Sequelize);
+db.events = EventModel(sequelize, Sequelize);
 
-db.useractivities.belongsTo(db.users);
 module.exports = db;

@@ -1,0 +1,81 @@
+CREATE TABLE IF NOT EXISTS `events` (
+  ID INT(11) NOT NULL AUTO_INCREMENT,
+  eventName VARCHAR(250) NOT NULL,
+  eventLocation VARCHAR(200) default null,
+  eventDescription TEXT default null,
+  eventCapacity INT(3) NOT NULL,
+  eventDate DATETIME DEFAULT CURRENT_TIMESTAMP NOT NULL,
+  
+  CONSTRAINT events_id_pk PRIMARY KEY (ID)
+);
+
+CREATE TABLE IF NOT EXISTS event_images (
+  ID INT(11) NOT NULL AUTO_INCREMENT,
+  eventID INT(11),
+  uploadDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+  imageLocation TEXT NOT NULL,  
+  
+  CONSTRAINT event_images_ID_pk PRIMARY KEY (ID),
+  CONSTRAINT event_images_eventID_fk FOREIGN KEY (eventID)
+  references `events`(ID)
+);
+
+CREATE TABLE IF NOT EXISTS event_categories (
+  eventID INT(11),
+  categoryID INT(5),
+  
+  CONSTRAINT event_categories_ID_pk PRIMARY KEY (eventID, categoryID),
+  CONSTRAINT event_categories_eventID_fk FOREIGN KEY (eventID)
+  references `events`(ID),
+  CONSTRAINT event_categories_categoryID_fk FOREIGN KEY (categoryID)
+  references categories(ID)
+);
+
+CREATE TABLE IF NOT EXISTS user_events (
+  userID INT(11),
+  eventID INT(11),
+  joinDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+  
+  CONSTRAINT users_events_IDs_pk PRIMARY KEY (userID, eventID),
+  CONSTRAINT users_events_userID_fk FOREIGN KEY (userID)
+  references users(ID),
+  CONSTRAINT users_events_eventID_fk FOREIGN KEY (eventID)
+  references `events`(ID)
+);
+
+
+CREATE TABLE IF NOT EXISTS chatrooms (
+  ID INT(20) NOT NULL AUTO_INCREMENT,
+  chatName VARCHAR(100) NOT NULL,
+  chatStatus VARCHAR(100) NOT NULL,
+  chatroomType VARCHAR(50) NOT NULL,
+  
+  CONSTRAINT chatrooms_ID_pk PRIMARY KEY (ID)
+);
+
+
+CREATE TABLE IF NOT EXISTS messages (
+  ID INT(20) NOT NULL AUTO_INCREMENT,
+  chatroomID INT(20),
+  content VARCHAR(255) NOT NULL,
+  senderID INT(11),
+  sendDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+  
+  CONSTRAINT messages_ID_pk PRIMARY KEY (ID),
+  CONSTRAINT messages_chatroomID_fk FOREIGN KEY (chatroomID)
+  references chatrooms(ID),
+  CONSTRAINT messages_senderID_fk FOREIGN KEY (senderID)
+  references users(ID)
+);
+
+CREATE TABLE IF NOT EXISTS chatroom_users (
+  userID INT(11),
+  chatroomID INT(11),
+  joinDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+  
+  CONSTRAINT chatroom_users_ID_pk PRIMARY KEY (userID, chatroomID),
+  CONSTRAINT chatroom_users_userID_fk FOREIGN KEY (userID)
+  references users(ID),
+  CONSTRAINT chatroom_users_chatroomID_fk FOREIGN KEY (chatroomID)
+  references chatrooms(ID)
+);
