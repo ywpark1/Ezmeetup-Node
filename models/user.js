@@ -5,6 +5,7 @@ const config = require('config');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
 
+
 module.exports = (sequelize, Sequelize) => {
 
     const userSchema = {
@@ -52,8 +53,20 @@ module.exports = (sequelize, Sequelize) => {
             });
     });
 
-    User.prototype.validPassword = async function(password) {
-        return await bcrypt.compare(password, this.password);
+    User.beforeUpdate(user => {
+        if(user.changed('password') && user.password != "") {
+            return bcrypt.hash(user.password, saltRounds)
+                .then(hashedPw => {
+                    user.password = hashedPw;
+                });
+        }
+         else {
+            user.password = user.previous.password;
+        }
+    });
+
+    User.prototype.validPassword = function(password) {
+        return bcrypt.compareSync(password, this.password);
     };
 
     User.prototype.generateAuthToken = function() {

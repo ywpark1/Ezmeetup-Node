@@ -16,4 +16,6 @@ db.sequelize = sequelize;
 db.users = UserModel(sequelize, Sequelize);
 db.events = EventModel(sequelize, Sequelize);
 
+db.events.belongsTo(db.users, { foreignKey: { name: 'userId', allowNull: false }});
+
 module.exports = db;

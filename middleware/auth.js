@@ -22,7 +22,6 @@ const localStrategy = require('passport-local').Strategy;
 const JwtStrategy = require('passport-jwt').Strategy;
 const ExtractJwt = require('passport-jwt').ExtractJwt;
 const User = require('../startup/dbconnection').users;
-const UserActivity = require('../startup/dbconnection').useractivities;
 
 const config = require('config');
 
@@ -38,6 +37,7 @@ passport.use(new localStrategy({
         if (!user) {
             return done(null, false, { message: 'Invalid email or password' });
         } else if (!user.validPassword(password)) {
+        // } else if (true) {
             return done(null, false, { message: 'Invalid email or password' });
         }
 
@@ -59,13 +59,6 @@ const opts = {
 
 passport.use(new JwtStrategy(opts, async (payload, done) => {
     try {
-        // const user = await User.findOne({
-        //     where: { id: payload.id },
-        //     include: [
-        //         { model: UserActivity }
-        //     ]
-        // });
-
         const user = await User.findById(payload.id);
 
         if (!user) {

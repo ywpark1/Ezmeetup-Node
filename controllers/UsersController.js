@@ -30,7 +30,7 @@ exports.create = (req, res) => {
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         phoneNumber: req.body.phoneNumber,
-        isAdmin: true
+        isAdmin: false
     }).then(user => {
 
         res.status(201).send(user);
@@ -68,19 +68,42 @@ exports.findById = (req, res) => {
 };
 
 // Update User info
+
+/** 
+ * TODOs
+ * Email changes
+ * Password changes
+ * others changes
+*/
 exports.update = (req, res) => {
-    const id = req.params.customerId;
-    User.update(
-        { firstname: req.body.firstname, lastname: req.body.lastname, age: req.body.age },
-        { where: { id: req.params.customerId } }
-    ).then(() => {
-        res.status(200).send("Updated successfully a user with id = " + id);
-    });
+    const id = req.params.userId;
+    
+    User.findOne({ where: { id: id } })
+        .then(user => {
+            return user.update({
+                email: req.body.email || user.email,
+                password: req.body.password || user.password,
+                firstName: req.body.firstName,
+                lastName: req.body.lastName,
+                phoneNumber: req.body.phoneNumber
+            })
+        })
+        .then(user => {
+            if (!user) {
+                res.status(404).send('User not found');
+            } else {
+                res.status(200).send(user);
+                // res.status(200).send("Updated successfully a user with id = " + id);
+            }
+        }).catch(err => {
+            res.status(400).send(err);
+        });
+            
 };
 
 // Delete a User by Id
 exports.delete = (req, res) => {
-    const id = req.params.customerId;
+    const id = req.params.userId;
     User.destroy({
         where: { id: id }
     }).then(() => {
@@ -88,13 +111,17 @@ exports.delete = (req, res) => {
     });
 };
 
-
+// Login method
 exports.login = (req, res, next) => {
 
     const token = req.user.generateAuthToken();
 
     res.header('x-auth-token', token).status(200).send(_.pick(req.user, ['id', 'email', 'loginStatus']));
     // res.status(200).send(req.user);
+
+    // req.user.update({
+    //     loginStatus: true
+    // });
 
     return next();
 }

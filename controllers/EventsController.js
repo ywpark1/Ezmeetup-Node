@@ -1,36 +1,48 @@
-// const connection = require('../startup/dbconnection');
 const _ = require('lodash');
 // const jwt = require('jsonwebtoken');
 const db = require('../startup/dbconnection');
 // const config = require('config');
 const Event = db.events;
+const User = db.users;
 
-// Create new user
-exports.create = (req, res) => {
-    // User.create({
-    //     email: req.body.email,
-    //     password: req.body.password,
-    //     firstName: req.body.firstName,
-    //     lastName: req.body.lastName,
-    //     phoneNumber: req.body.phoneNumber,
-    //     isAdmin: true
-    // }).then(user => {
-
-    //     res.status(201).send(user);
-    // }).catch(err => {
-    //     res.status(400).send(err);
-    // });
-};
-
-// Display list of all Users.
+// Display list of all Events.
 exports.findAll = (req, res) => {
-    // User.findAll()
-    //     .then(users => {
-    //         res.send(users);
-    //     }).catch(err => {
-    //         res.status(400).send(err.errors[0].message);
-    //     });
+    Event.findAll()
+        .then(events => {
+            res.send(events);
+        }).catch(err => {
+            res.status(400).send(err.errors[0].message);
+        });
 };
+
+exports.findAllWithUser = (req, res) => {
+    Event.findAll({ where: { userId: req.params.userId } })
+        .then(events => {
+            res.send(events);
+        }).catch(err => {
+            res.status(400).send(err.errors[0].message);
+        });
+};
+
+// Create new event
+exports.create = (req, res) => {
+    Event.create({
+        eventName: req.body.eventName,
+        eventLocation: req.body.eventLocation,
+        eventDescription: req.body.eventDescription,
+        eventCapacity: req.body.eventCapacity,
+        userId: req.body.userId
+    }).then(event => {
+        res.status(201).send(event);
+    }).catch(err => {
+        if(err.name === "SequelizeForeignKeyConstraintError") {
+            res.status(400).send("Event creator does not exist");
+        }
+        res.status(400).send(err);
+    });
+};
+
+
 
 // Find a User by Id
 exports.findById = (req, res) => {

@@ -3,7 +3,7 @@
 const jwt = require('jsonwebtoken');
 const config = require('config');
 
-
+const User = require('../startup/dbconnection').users;
 
 module.exports = (sequelize, Sequelize) => {
 
@@ -28,15 +28,10 @@ module.exports = (sequelize, Sequelize) => {
         eventCapacity: {
             type: Sequelize.INTEGER(3).UNSIGNED,
             allowNull: false
-        },
-        isAdmin: {
-            type: Sequelize.DATE,
-            defaultValue: Sequelize.NOW,
-            allowNull: false
         }
     };
 
-    const Event = sequelize.define('event', userSchema, {});
+    const Event = sequelize.define('event', eventSchema, {});
     // User.beforeCreate((user, option) => {
     //     return bcrypt.hash(user.password, saltRounds)
     //         .then(hashedPw => {
