@@ -28,6 +28,10 @@ module.exports = (sequelize, Sequelize) => {
         eventCapacity: {
             type: Sequelize.INTEGER(3).UNSIGNED,
             allowNull: false
+        },
+        eventDate: {
+            type: Sequelize.DATE,
+            defaultValue: Sequelize.NOW
         }
     };
 

@@ -13,24 +13,22 @@ const { authLocal, authJwt } = require('../middleware/auth');
 const admin = require('../middleware/admin');
 
 const User = require('../startup/dbconnection').users;
-const bcrypt = require('bcrypt');
 
+// Users
+router.get('/', [authJwt, admin], userController.findAll);
 
-router.get('/', userController.findAll);
 router.post('/register', userController.create);
 router.post('/login', authLocal, userController.login);
-router.get('/:userId', userController.findById);
-router.get('/:userId/events', eventController.findAllWithUser);
-// router.put('/:userId', userController.update);
-router.put('/:userId', authJwt, userController.update);
-// router.put('/:userId', authJwt, (req, res) => {
-//     res.send("aa");
-// });
-router.delete('/:userId', userController.delete);
 
-// router.get('/hello', authJwt, (req, res) => {
-//     res.send('This is a private route!!!!');
-// });
+router.get('/:userId', authJwt, userController.findById);
+router.put('/:userId', authJwt, userController.update);
+router.delete('/:userId', authJwt, userController.delete);
+
+// Events with User
+router.get('/:userId/events', authJwt, eventController.findAllWithUser); // list of events user joined
+router.put('/:userId/events/:eventId', authJwt, eventController.update); // update event info if user is a event creator
+router.post('/:userId/events/:eventId', authJwt, userController.joinEvent); // Join the event
+
 
 
 module.exports = router;

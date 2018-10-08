@@ -9,6 +9,9 @@ CREATE TABLE IF NOT EXISTS `events` (
   CONSTRAINT events_id_pk PRIMARY KEY (ID)
 );
 
+
+==============================================================
+
 CREATE TABLE IF NOT EXISTS event_images (
   ID INT(11) NOT NULL AUTO_INCREMENT,
   eventID INT(11),

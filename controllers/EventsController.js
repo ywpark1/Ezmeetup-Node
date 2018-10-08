@@ -31,6 +31,7 @@ exports.create = (req, res) => {
         eventLocation: req.body.eventLocation,
         eventDescription: req.body.eventDescription,
         eventCapacity: req.body.eventCapacity,
+        eventDate: req.body.eventDate,
         userId: req.body.userId
     }).then(event => {
         res.status(201).send(event);
@@ -46,39 +47,58 @@ exports.create = (req, res) => {
 
 // Find a User by Id
 exports.findById = (req, res) => {
-    // User.findOne({ where: { id: req.params.userId } }, {
-    //     attributes: {
-    //         exclude: ['password']
-    //     }
-    // })
-    //     .then(user => {
-    //         if (!user) {
-    //             res.status(404).send('User not found');
-    //         } else {
-    //             res.status(200).send(user);
-    //         }
-    //     }).catch(err => {
-    //         res.status(400).send(err);
-    //     });
+    Event.findOne({ where: { id: req.params.eventId } })
+        .then(event => {
+            if (!event) {
+                res.status(404).send('Event not found');
+            } else {
+                res.status(200).send(event);
+            }
+        }).catch(err => {
+            res.status(400).send(err);
+        });
 };
 
 // Update User info
 exports.update = (req, res) => {
-    // const id = req.params.customerId;
-    // User.update(
-    //     { firstname: req.body.firstname, lastname: req.body.lastname, age: req.body.age },
-    //     { where: { id: req.params.customerId } }
-    // ).then(() => {
-    //     res.status(200).send("Updated successfully a user with id = " + id);
-    // });
+    const userId = req.params.userId;
+    const eventId = req.params.eventId;
+
+    Event.findOne({
+        where: {
+            id: eventId,
+            userId: userId
+        }
+    })
+        .then(event => {
+            if (!event) {
+                res.status(404).send('Event not found');
+            }
+
+            return event.update({
+                eventName: req.body.eventName,
+                eventLocation: req.body.eventLocation,
+                eventDescription: req.body.eventDescription,
+                eventCapacity: req.body.eventCapacity,
+                eventDate: req.body.eventDate,
+            })
+        })
+        .then(event => {
+            res.status(200).send(event);
+            // res.status(200).send("Updated successfully a event with id = " + id);
+            
+        }).catch(err => {
+            res.status(400).send(err);
+        });
 };
 
 // Delete a User by Id
 exports.delete = (req, res) => {
-    // const id = req.params.customerId;
-    // User.destroy({
-    //     where: { id: id }
-    // }).then(() => {
-    //     res.status(200).send('deleted successfully a User with id = ' + id);
-    // });
+    const userId = req.params.userId;
+    const eventId = req.params.eventId;
+    Event.destroy({
+        where: { id: eventId, userId: userId }
+    }).then(() => {
+        res.status(200).send('deleted successfully a User with id = ' + id);
+    });
 };

@@ -4,26 +4,10 @@ const _ = require('lodash');
 const db = require('../startup/dbconnection');
 // const config = require('config');
 const User = db.users;
-const UserActivity = db.useractivities;
+const UserEvent = db.userEvents;
 
 // Create new user
 exports.create = (req, res) => {
-    // UserActivity.create({
-    //     user: {
-    //         email: req.body.email,
-    //         password: req.body.password,
-    //         firstName: req.body.firstName,
-    //         lastName: req.body.lastName,
-    //         phoneNumber: req.body.phoneNumber,
-    //         isAdmin: true
-    //     }
-    // }, { include: [ User ] })
-    // .then(user => {
-    //     res.status(201).send(user);
-    // }).catch(err => {
-    //     res.status(400).send(err);
-    // });
-
     User.create({
         email: req.body.email,
         password: req.body.password,
@@ -32,7 +16,6 @@ exports.create = (req, res) => {
         phoneNumber: req.body.phoneNumber,
         isAdmin: false
     }).then(user => {
-
         res.status(201).send(user);
     }).catch(err => {
         res.status(400).send(err);
@@ -70,7 +53,7 @@ exports.findById = (req, res) => {
 // Update User info
 
 /** 
- * TODOs
+ * TODOs for Update
  * Email changes
  * Password changes
  * others changes
@@ -125,3 +108,18 @@ exports.login = (req, res, next) => {
 
     return next();
 }
+
+// Join the event
+exports.joinEvent = (req, res) => {
+    const userId = req.params.userId;
+    const eventId = req.params.eventId;
+
+    UserEvent.create({
+        userId: userId,
+        eventId: eventId
+    }).then(userEvent => {
+        res.status(201).send(userEvent);
+    }).catch(err => {
+        res.status(400).send(err);
+    });
+};
