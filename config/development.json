@@ -4,7 +4,7 @@
         "database": "ezmeetup",
         "host": "localhost",
         "dialect": "mysql",
-        "username": "root1",
+        "username": "ezmeetup",
         "pool": {
             "max": 10,
             "min": 0,
