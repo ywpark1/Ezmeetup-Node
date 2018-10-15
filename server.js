@@ -15,18 +15,28 @@ console.log('Application Name: ' + config.get('name') + '\n');
 
 const db = require('./startup/dbconnection');
 
-// db
-//   .authenticate()
-//   .then(() => {
-//     logger.info('Connection has been established successfully.');
-//   })
-//   .catch(err => {
-//     logger.error('Unable to connect to the database:', err);
-// });
-
-db.sequelize.sync({force: true}).then(() => {
-    console.log('Drop and Resync with { force: true }');
-});
+db.sequelize.sync({force: true})
+    .then(() => {
+        db.categories.bulkCreate([
+            { categoryName: 'Food'},
+            { categoryName: 'Event'},
+            { categoryName: 'Sports'},
+            { categoryName: 'Car Pool'},
+            { categoryName: 'Conference'},
+            { categoryName: 'Entertainment'}
+        ]).then(() => {
+            db.users.create({
+                email: "admin@test.ca",
+                password: "admin123",
+                firstName: "Admin",
+                lastName: "Admin",
+                phoneNumber: "123-456-7890",
+                isAdmin: true
+            })
+        }).then(() => {
+            console.log('Drop and Resync with { force: true }');
+        });
+    });
 
 // const port = process.env.PORT || 3000;
 const port = 10034;
