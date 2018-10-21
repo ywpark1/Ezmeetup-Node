@@ -49,6 +49,16 @@ If you see the directory called **node_modules** under the root directory of thi
 * Logs - store the logs
 
 
+### API Links
+
+* [POST] /api/users/register - Register the user
+* [GET] /api/users/login - Login the user. Get the Token
+* [GET] /api/users/:userId - Get One user Info by user ID
+* [PUT] /api/users/:userId - Update One user Info by user ID
+
+**Note** : It is updating continuously
+
+
 ## Running the tests
 
  We will add the test functionality later.
