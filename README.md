@@ -12,14 +12,12 @@ Also, all instructions are for Linux and MacOS. There is not much difference for
 
 Latest nodejs should be installed on your local machine(v8.12.0 LTS or higher). To check if you have installed nodejs, run the following commands :
 
-
 ```bash
 node -v
 npm -v
 ```
 
 Also, git should be installed.
-
 
 ### Installing
 
@@ -39,30 +37,32 @@ npm install
 
 If you see the directory called **node_modules** under the root directory of this repo(i.e. ezmeetup-repo), you installed it correctly.
 
-
 ### File Structure
 
-* Model - the connection to the MySQL db
-* Controller - CRUD functionalities
-* Route - Receive request, call controller method, and return the return with status code
-* Startup - Initialize all app settings
-* Logs - store the logs
-
+- Model - the connection to the MySQL db
+- Controller - CRUD functionalities
+- Route - Receive request, call controller method, and return the return with status code
+- Startup - Initialize all app settings
+- Logs - store the logs
 
 ### API Links
 
-* [POST] /api/users/register - Register the user
-* [GET] /api/users/login - Login the user. Get the Token
-* [GET] /api/users/:userId - Get One user Info by user ID
-* [PUT] /api/users/:userId - Update One user Info by user ID
+#### /api/users
+
+- [POST] /api/users/register - Register the user
+- [GET] /api/users/login - Login the user. Get the Token
+- [GET] /api/users/:userId - Get One user Info by user ID
+- [PUT] /api/users/:userId - Update One user Info by user ID
+
+#### /api/categories
+
+- [GET] /api/categories - Get all categories
 
 **Note** : It is updating continuously
 
-
 ## Running the tests
 
- We will add the test functionality later.
-
+We will add the test functionality later.
 
 ## Deployment
 
@@ -70,43 +70,43 @@ Change the DB settings under config directory.
 
 ## Built With
 
-* [NodeJS](https://nodejs.org/en/) - API Server
-* [ExpressJS](https://expressjs.com/) - NodeJS Framework
- 
+- [NodeJS](https://nodejs.org/en/) - API Server
+- [ExpressJS](https://expressjs.com/) - NodeJS Framework
+
 ## Authors
 
-* Derrick Leung (Group Leader)
-* Sina Kamali
-* Yeonwoo Park
-
+- Derrick Leung (Group Leader)
+- Sina Kamali
+- Yeonwoo Park
 
 ## TODOs
-* apiDoc
 
-* Log Error
+- apiDoc
 
-* Check all queries before creating the table in DB
+- Log Error
 
-* Add user roles to User
+- Check all queries before creating the table in DB
 
-* Authenticate User(JWT and Passport)
+- Add user roles to User
 
-* Form Validator
+- Authenticate User(JWT and Passport)
 
-* Models :
-    * User
-    * Event
-    * Friend
-    * Chat(Takes long time)
-	
-* Controller :
-    * User
-    * Event
-    * Friend
-    * Chat(Takes long time)
+- Form Validator
 
-* API with requests :
-    * User
-    * Event
-    * Friend
-    * Chat(Takes long time)
+- Models :
+  - User
+  - Event
+  - Friend
+  - Chat(Takes long time)
+- Controller :
+
+  - User
+  - Event
+  - Friend
+  - Chat(Takes long time)
+
+- API with requests :
+  - User
+  - Event
+  - Friend
+  - Chat(Takes long time)
