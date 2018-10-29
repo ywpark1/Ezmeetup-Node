@@ -7,6 +7,7 @@ const EventModel = require("../models/event");
 const UserEventModel = require("../models/userEvent");
 const CategoryModel = require("../models/category");
 const EventCategoryModel = require("../models/eventCategory");
+const UserCategoryModel = require("../models/userCategory");
 
 const sequelize = new Sequelize(config.get("dbConfig"));
 const db = {};
@@ -20,6 +21,7 @@ db.events = EventModel(sequelize, Sequelize);
 db.userEvents = UserEventModel(sequelize, Sequelize);
 db.categories = CategoryModel(sequelize, Sequelize);
 db.eventCategories = EventCategoryModel(sequelize, Sequelize);
+db.userCategories = UserCategoryModel(sequelize, Sequelize);
 
 db.events.belongsTo(db.users, {
   foreignKey: { name: "userId", allowNull: false }
@@ -53,6 +55,22 @@ db.eventCategories.belongsTo(db.categories, {
   foreignKey: { primaryKey: true, name: "categoryId", allowNull: false }
 });
 db.categories.hasMany(db.eventCategories, {
+  foreignKey: "categoryId",
+  constraints: false
+});
+
+db.userCategories.belongsTo(db.users, {
+  foreignKey: { primaryKey: true, name: "userId", allowNull: false }
+});
+db.users.hasMany(db.userCategories, {
+  foreignKey: "userId",
+  constraints: false
+});
+
+db.userCategories.belongsTo(db.categories, {
+  foreignKey: { primaryKey: true, name: "categoryId", allowNull: false }
+});
+db.categories.hasMany(db.userCategories, {
   foreignKey: "categoryId",
   constraints: false
 });
