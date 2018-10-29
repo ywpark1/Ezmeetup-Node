@@ -20,8 +20,8 @@ router.get("/", [authJwt, admin], userController.findAll);
 router.post("/register", userController.create);
 router.post("/login", authLocal, userController.login);
 
-router.get("/:userId", authJwt, userController.findById);
-router.put("/:userId", authJwt, userController.update);
+router.get("/:userId", userController.findById);
+router.put("/:userId", userController.update);
 router.delete("/:userId", authJwt, userController.delete);
 
 // Events with User
