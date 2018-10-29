@@ -175,7 +175,7 @@ exports.login = (req, res, next) => {
   const token = req.user.generateAuthToken();
 
   res
-    .header("x-auth-token", token)
+    .header("AuthToken", token)
     .status(200)
     .send(_.pick(req.user, ["id", "email", "loginStatus"]));
   // res.status(200).send(req.user);
