@@ -6,23 +6,66 @@ const db = require("../startup/dbconnection");
 const User = db.users;
 const Event = db.events;
 const UserEvent = db.userEvents;
+const UserCategory = db.userCategories;
+const Category = db.categories;
+
+function getOneUserWithCategories(userId) {
+  return User.findOne({
+    where: { id: userId },
+    include: [
+      {
+        model: UserCategory,
+        attributes: ["categoryId"],
+        include: [
+          {
+            model: Category,
+            attributes: ["categoryName"]
+          }
+        ]
+      }
+    ]
+  });
+}
 
 // Create new user
 exports.create = (req, res) => {
   User.create({
-    email: req.body.email,
-    password: req.body.password,
-    firstName: req.body.firstName,
-    lastName: req.body.lastName,
-    phoneNumber: req.body.phoneNumber,
+    // email: req.body.email,
+    // password: req.body.password,
+    // firstName: req.body.firstName,
+    // lastName: req.body.lastName,
+    // phoneNumber: req.body.phoneNumber,
+    // isAdmin: false
+    email: "test1@test.ca",
+    password: "Password123",
+    firstName: "Firstname1",
+    lastName: "Lastname1",
+    phoneNumber: "123-456-7895",
     isAdmin: false
   })
     .then(user => {
-      res.status(201).send(user);
+      const categoryArr = req.body.categoryIds.map(id => ({
+        userId: user.id,
+        categoryId: id
+      }));
+      UserCategory.bulkCreate(categoryArr).then(() => {
+        getOneUserWithCategories(user.id).then(user => {
+          res.status(201).send(user);
+        });
+      });
     })
     .catch(err => {
+      if (err.name === "SequelizeForeignKeyConstraintError") {
+        res.status(400).send("User creator does not exist");
+      }
       res.status(400).send(err);
     });
+  // .then(user => {
+  //   res.status(201).send(user);
+  // })
+  // .catch(err => {
+  //   res.status(400).send(err);
+  // });
 };
 
 // Display list of all Users.
@@ -38,14 +81,7 @@ exports.findAll = (req, res) => {
 
 // Find a User by Id
 exports.findById = (req, res) => {
-  User.findOne(
-    { where: { id: req.params.userId } },
-    {
-      attributes: {
-        exclude: ["password"]
-      }
-    }
-  )
+  getOneUserWithCategories(req.params.userId)
     .then(user => {
       if (!user) {
         res.status(404).send("User not found");
@@ -56,6 +92,24 @@ exports.findById = (req, res) => {
     .catch(err => {
       res.status(400).send(err);
     });
+  //   User.findOne(
+  //     { where: { id: req.params.userId } },
+  //     {
+  //       attributes: {
+  //         exclude: ["password"]
+  //       }
+  //     }
+  //   )
+  //     .then(user => {
+  //       if (!user) {
+  //         res.status(404).send("User not found");
+  //       } else {
+  //         res.status(200).send(user);
+  //       }
+  //     })
+  //     .catch(err => {
+  //       res.status(400).send(err);
+  //     });
 };
 
 // Update User info
@@ -72,20 +126,34 @@ exports.update = (req, res) => {
   User.findOne({ where: { id: id } })
     .then(user => {
       return user.update({
-        email: req.body.email || user.email,
-        password: req.body.password || user.password,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        phoneNumber: req.body.phoneNumber
+        // email: req.body.email || user.email,
+        // password: req.body.password || user.password,
+        // firstName: req.body.firstName,
+        // lastName: req.body.lastName,
+        // phoneNumber: req.body.phoneNumber
+        email: "test2@test.ca",
+        password: "Password123",
+        firstName: "Firstname2",
+        lastName: "Lastname2",
+        phoneNumber: "123-456-7895"
       });
     })
     .then(user => {
-      if (!user) {
-        res.status(404).send("User not found");
-      } else {
-        res.status(200).send(user);
-        // res.status(200).send("Updated successfully a user with id = " + id);
-      }
+      if (!user) res.status(404).send("User not found");
+
+      UserCategory.destroy({
+        where: { userId: user.id }
+      }).then(() => {
+        const categoryArr = req.body.categoryIds.map(id => ({
+          userId: user.id,
+          categoryId: id
+        }));
+        UserCategory.bulkCreate(categoryArr).then(() => {
+          getOneUserWithCategories(user.id).then(user => {
+            res.status(200).send(user);
+          });
+        });
+      });
     })
     .catch(err => {
       res.status(400).send(err);
