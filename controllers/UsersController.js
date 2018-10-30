@@ -30,18 +30,18 @@ function getOneUserWithCategories(userId) {
 // Create new user
 exports.create = (req, res) => {
   User.create({
-    // email: req.body.email,
-    // password: req.body.password,
-    // firstName: req.body.firstName,
-    // lastName: req.body.lastName,
-    // phoneNumber: req.body.phoneNumber,
-    // isAdmin: false
-    email: "test1@test.ca",
-    password: "Password123",
-    firstName: "Firstname1",
-    lastName: "Lastname1",
-    phoneNumber: "123-456-7895",
+    email: req.body.email,
+    password: req.body.password,
+    firstName: req.body.firstName,
+    lastName: req.body.lastName,
+    phoneNumber: req.body.phoneNumber,
     isAdmin: false
+    // email: "test1@test.ca",
+    // password: "Password123",
+    // firstName: "Firstname1",
+    // lastName: "Lastname1",
+    // phoneNumber: "123-456-7895",
+    // isAdmin: false
   })
     .then(user => {
       const categoryArr = req.body.categoryIds.map(id => ({
@@ -126,16 +126,16 @@ exports.update = (req, res) => {
   User.findOne({ where: { id: id } })
     .then(user => {
       return user.update({
-        // email: req.body.email || user.email,
-        // password: req.body.password || user.password,
-        // firstName: req.body.firstName,
-        // lastName: req.body.lastName,
-        // phoneNumber: req.body.phoneNumber
-        email: "test2@test.ca",
-        password: "Password123",
-        firstName: "Firstname2",
-        lastName: "Lastname2",
-        phoneNumber: "123-456-7895"
+        email: req.body.email || user.email,
+        password: req.body.password || user.password,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
+        phoneNumber: req.body.phoneNumber
+        // email: "test2@test.ca",
+        // password: "Password123",
+        // firstName: "Firstname2",
+        // lastName: "Lastname2",
+        // phoneNumber: "123-456-7895"
       });
     })
     .then(user => {
