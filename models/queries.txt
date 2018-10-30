@@ -9,20 +9,6 @@ CREATE TABLE IF NOT EXISTS `events` (
   CONSTRAINT events_id_pk PRIMARY KEY (ID)
 );
 
-
-==============================================================
-
-CREATE TABLE IF NOT EXISTS event_images (
-  ID INT(11) NOT NULL AUTO_INCREMENT,
-  eventID INT(11),
-  uploadDate DATETIME DEFAULT CURRENT_TIMESTAMP,
-  imageLocation TEXT NOT NULL,  
-  
-  CONSTRAINT event_images_ID_pk PRIMARY KEY (ID),
-  CONSTRAINT event_images_eventID_fk FOREIGN KEY (eventID)
-  references `events`(ID)
-);
-
 CREATE TABLE IF NOT EXISTS event_categories (
   eventID INT(11),
   categoryID INT(5),
@@ -43,6 +29,20 @@ CREATE TABLE IF NOT EXISTS user_events (
   CONSTRAINT users_events_userID_fk FOREIGN KEY (userID)
   references users(ID),
   CONSTRAINT users_events_eventID_fk FOREIGN KEY (eventID)
+  references `events`(ID)
+);
+
+
+==============================================================
+
+CREATE TABLE IF NOT EXISTS event_images (
+  ID INT(11) NOT NULL AUTO_INCREMENT,
+  eventID INT(11),
+  uploadDate DATETIME DEFAULT CURRENT_TIMESTAMP,
+  imageLocation TEXT NOT NULL,  
+  
+  CONSTRAINT event_images_ID_pk PRIMARY KEY (ID),
+  CONSTRAINT event_images_eventID_fk FOREIGN KEY (eventID)
   references `events`(ID)
 );
 
