@@ -14,6 +14,11 @@ const admin = require("../middleware/admin");
 const { authJwt } = require("../middleware/auth");
 
 router.get("/", eventController.findAll);
+router.get(
+  "/withCategoriesOfUser/:userId",
+  eventController.findAllWithCategories
+);
+
 router.post("/create", eventController.create);
 
 router.get("/:eventId", eventController.findById);
