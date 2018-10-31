@@ -69,6 +69,40 @@ db.sequelize.sync({ force: true }).then(() => {
       ]);
     })
     .then(categories => {
+      return db.eventImages.bulkCreate([
+        {
+          eventId: 1,
+          image:
+            "http://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Cineplex_logo.svg/500px-Cineplex_logo.svg.png"
+        },
+        {
+          eventId: 1,
+          image:
+            "https://mediafiles.cineplex.com/Attachments/NewItems/venom-595x326-EN_20181005144852_0.jpg"
+        },
+        {
+          eventId: 1,
+          image:
+            "https://mediafiles.cineplex.com/Attachments/NewItems/astarisborn-595x326-EN_20181005144910_0.jpg"
+        },
+        {
+          eventId: 2,
+          image:
+            "https://theex.com/statcache/pthumb/images/galleries/skyride/skyride_1.fe2c857b.jpg"
+        },
+        {
+          eventId: 2,
+          image:
+            "https://theex.com/statcache/pthumb/images/food/restaurants/ribfest_lg.ce9edee6.jpg"
+        },
+        {
+          eventId: 2,
+          image:
+            "https://theex.com/statcache/pthumb/images/food/craft_beer_fest_2015.ce9edee6.jpg"
+        }
+      ]);
+    })
+    .then(categories => {
       console.log("Drop and Resync with { force: true }");
     });
 });

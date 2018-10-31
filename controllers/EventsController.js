@@ -8,6 +8,7 @@ const Category = db.categories;
 const EventCategory = db.eventCategories;
 const User = db.users;
 const UserCategory = db.userCategories;
+const EventImage = db.eventImages;
 
 function getOneEventWithCategories(eventId) {
   return Event.findOne({
@@ -22,6 +23,10 @@ function getOneEventWithCategories(eventId) {
             attributes: ["categoryName"]
           }
         ]
+      },
+      {
+        model: EventImage,
+        attributes: ["image"]
       }
     ]
   });
@@ -39,6 +44,10 @@ function getAllEventsWithCategories() {
             attributes: ["categoryName"]
           }
         ]
+      },
+      {
+        model: EventImage,
+        attributes: ["image"]
       }
     ]
   });
@@ -84,6 +93,10 @@ exports.findAllWithCategories = (req, res) => {
                 attributes: ["categoryName"]
               }
             ]
+          },
+          {
+            model: EventImage,
+            attributes: ["image"]
           }
         ],
         distinct: true
@@ -141,7 +154,7 @@ exports.create = (req, res) => {
     });
 };
 
-// Find a User by Id
+// Find an event by Id
 exports.findById = (req, res) => {
   getOneEventWithCategories(req.params.eventId)
     .then(event => {
