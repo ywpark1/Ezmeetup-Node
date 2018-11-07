@@ -174,6 +174,7 @@ exports.delete = (req, res) => {
 
 // Login method
 exports.login = (req, res, next) => {
+  console.log(req.user.userVerified());
   if (!req.user.userVerified()) {
     res.status(401).send("Please check your email to verify your account");
     return next();

@@ -43,9 +43,9 @@ passport.use(
         //   return done(null, false, { message: "User is not verified" });
         // }
 
-        // user.update({
-        //   loginStatus: true
-        // });
+        user.update({
+          loginStatus: true
+        });
 
         return done(null, user, { message: "Logged in Successfully" });
       } catch (error) {
