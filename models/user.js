@@ -44,7 +44,7 @@ module.exports = (sequelize, Sequelize) => {
   };
 
   User.prototype.userVerified = function() {
-    return this.isVerified;
+    return this.isVerified !== 0;
   };
 
   User.prototype.generateAuthToken = function() {
