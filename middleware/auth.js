@@ -56,15 +56,23 @@ passport.use(
 );
 
 // Authenticate Passport
-const opts = {
-  jwtFromRequest: ExtractJwt.fromHeader("AuthToken"),
-  secretOrKey: config.get("jwtPrivateKey")
-};
+// const opts = {
+//   jwtFromRequest: ExtractJwt.fromHeader("AuthToken"),
+//   secretOrKey: config.get("jwtPrivateKey")
+// };
+
+var jwtOptions = {};
+jwtOptions.jwtFromRequest = ExtractJwt.fromHeader("authtoken");
+jwtOptions.secretOrKey = config.get("jwtPrivateKey");
+
+// console.log(opts);
 
 passport.use(
-  new JwtStrategy(opts, async (payload, done) => {
+  new JwtStrategy(jwtOptions, async (payload, done) => {
     try {
       const user = await User.findById(payload.id);
+
+      console.log(user);
 
       if (!user) {
         return done(null, false);
@@ -73,6 +81,7 @@ passport.use(
       }
 
       return done(null, user);
+      //   return done(null, payload);
     } catch (error) {
       done(error, false);
     }
