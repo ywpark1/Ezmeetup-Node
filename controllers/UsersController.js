@@ -200,7 +200,7 @@ exports.verifyAccount = (req, res) => {
     User.findOne({ where: { id: decoded.id, email: decoded.email } })
       .then(user => {
         if (!user) return res.status(400).send("Token is invalid");
-        if (user.userVerified)
+        if (user.userVerified())
           return res.status(400).send("This user has already been verified.");
 
         user.update({
