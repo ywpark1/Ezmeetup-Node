@@ -18,14 +18,15 @@ const User = require("../startup/dbconnection").users;
 router.get("/", [authJwt, admin], userController.findAll);
 
 router.post("/register", userController.create);
+router.get("/verify/:token", userController.verifyAccount);
 router.post("/login", authLocal, userController.login);
 
-router.get("/:userId", userController.findById);
-router.put("/:userId", userController.update);
+router.get("/:userId", authJwt, userController.findById);
+router.put("/:userId", authJwt, userController.update);
 router.delete("/:userId", authJwt, userController.delete);
 
 // Events with User
-router.get("/:userId/events", userController.findAllEventsById); // list of events user joined
+router.get("/:userId/events", authJwt, userController.findAllEventsById); // list of events user joined
 router.put("/:userId/events/edit/:eventId", authJwt, eventController.update); // update event info if user is a event creator
 router.post("/:userId/events/join/:eventId", userController.joinEvent); // Join the event
 

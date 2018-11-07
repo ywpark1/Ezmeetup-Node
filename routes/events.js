@@ -16,11 +16,12 @@ const { authJwt } = require("../middleware/auth");
 router.get("/", eventController.findAll);
 router.get(
   "/withCategoriesOfUser/:userId",
+  authJwt,
   eventController.findAllWithCategories
 );
 
-router.post("/create", eventController.create);
+router.post("/create", authJwt, eventController.create);
 
-router.get("/:eventId", eventController.findById);
+router.get("/:eventId", authJwt, eventController.findById);
 
 module.exports = router;

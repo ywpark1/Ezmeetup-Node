@@ -10,6 +10,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@sendgrid/mail": "^6.3.1",
     "apidoc": "^0.17.6",
     "bcrypt": "^3.0.0",
     "compression": "^1.7.3",
@@ -24,6 +25,7 @@
     "lodash": "^4.17.11",
     "morgan": "^1.9.1",
     "mysql2": "^1.6.1",
+    "nodemailer": "^4.6.8",
     "nodemon": "^1.18.5",
     "passport": "^0.4.0",
     "passport-jwt": "^4.0.0",

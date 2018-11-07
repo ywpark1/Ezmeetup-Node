@@ -1,8 +1,9 @@
 // const connection = require('../startup/dbconnection');
 const _ = require("lodash");
-// const jwt = require('jsonwebtoken');
+const jwt = require("jsonwebtoken");
 const db = require("../startup/dbconnection");
-// const config = require('config');
+const config = require("config");
+
 const User = db.users;
 const Event = db.events;
 const UserEvent = db.userEvents;
@@ -27,6 +28,30 @@ function getOneUserWithCategories(userId) {
   });
 }
 
+function sendVerificationEmail(user) {
+  const token = user.generateVerifyToken();
+  const sgMail = require("@sendgrid/mail");
+  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
+  const msg = {
+    to: user.email,
+    from: "no-reply@ezmeetup.com",
+    subject: "Confirm your account",
+    text:
+      "Thank you for using our application!. Please click this link to verify your account : \n",
+    html:
+      "<a href='http://myvmlab.senecacollege.ca:6282/api/users/verify/" +
+      token +
+      "'>Activate account</a>"
+    // html:
+    //   "<a href='http://localhost:10034/api/users/verify/" +
+    //   token +
+    //   "'>Activate account</a>"
+  };
+  //   console.log(process.env.SENDGRID_API_KEY);
+  //   console.log(msg);
+  sgMail.send(msg);
+}
+
 // Create new user
 exports.create = (req, res) => {
   User.create({
@@ -49,7 +74,8 @@ exports.create = (req, res) => {
         categoryId: id
       }));
       UserCategory.bulkCreate(categoryArr).then(() => {
-        getOneUserWithCategories(user.id).then(user => {
+        getOneUserWithCategories(user.id).then(async user => {
+          await sendVerificationEmail(user);
           res.status(201).send(user);
         });
       });
@@ -60,12 +86,6 @@ exports.create = (req, res) => {
       }
       res.status(400).send(err);
     });
-  // .then(user => {
-  //   res.status(201).send(user);
-  // })
-  // .catch(err => {
-  //   res.status(400).send(err);
-  // });
 };
 
 // Display list of all Users.
@@ -92,24 +112,6 @@ exports.findById = (req, res) => {
     .catch(err => {
       res.status(400).send(err);
     });
-  //   User.findOne(
-  //     { where: { id: req.params.userId } },
-  //     {
-  //       attributes: {
-  //         exclude: ["password"]
-  //       }
-  //     }
-  //   )
-  //     .then(user => {
-  //       if (!user) {
-  //         res.status(404).send("User not found");
-  //       } else {
-  //         res.status(200).send(user);
-  //       }
-  //     })
-  //     .catch(err => {
-  //       res.status(400).send(err);
-  //     });
 };
 
 // Update User info
@@ -172,19 +174,44 @@ exports.delete = (req, res) => {
 
 // Login method
 exports.login = (req, res, next) => {
+  if (!req.user.userVerified()) {
+    res.status(401).send("Please check your email to verify your account");
+    return next();
+  }
+
   const token = req.user.generateAuthToken();
 
   res
     .header("AuthToken", token)
     .status(200)
     .send(_.pick(req.user, ["id", "email", "loginStatus"]));
-  // res.status(200).send(req.user);
-
-  // req.user.update({
-  //     loginStatus: true
-  // });
 
   return next();
+};
+
+// Verify Account
+exports.verifyAccount = (req, res) => {
+  jwt.verify(req.params.token, config.get("jwtPrivateKey"), (err, decoded) => {
+    if (err) {
+      return res.status(400).send("Token is invalid");
+    }
+
+    User.findOne({ where: { id: decoded.id, email: decoded.email } })
+      .then(user => {
+        if (!user) return res.status(400).send("Token is invalid");
+        if (user.userVerified)
+          return res.status(400).send("This user has already been verified.");
+
+        user.update({
+          isVerified: true
+        });
+
+        res.status(200).send("This account has been verified.");
+      })
+      .catch(err => {
+        res.status(400).send(err.errors[0].message);
+      });
+  });
 };
 
 // Join the event

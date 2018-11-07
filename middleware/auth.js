@@ -37,13 +37,15 @@ passport.use(
         if (!user) {
           return done(null, false, { message: "Invalid email or password" });
         } else if (!user.validPassword(password)) {
-          // } else if (true) {
           return done(null, false, { message: "Invalid email or password" });
         }
+        // else if (!user.userVerified()) {
+        //   return done(null, false, { message: "User is not verified" });
+        // }
 
-        user.update({
-          loginStatus: true
-        });
+        // user.update({
+        //   loginStatus: true
+        // });
 
         return done(null, user, { message: "Logged in Successfully" });
       } catch (error) {
