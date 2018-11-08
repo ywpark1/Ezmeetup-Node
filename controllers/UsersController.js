@@ -128,11 +128,12 @@ exports.update = (req, res) => {
   User.findOne({ where: { id: id } })
     .then(user => {
       return user.update({
-        email: req.body.email || user.email,
+        // email: req.body.email || user.email,
+        email: user.email,
         password: req.body.password || user.password,
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        phoneNumber: req.body.phoneNumber
+        firstName: req.body.firstName || user.firstName,
+        lastName: req.body.lastName || user.lastName,
+        phoneNumber: req.body.phoneNumber || user.phoneNumber
         // email: "test2@test.ca",
         // password: "Password123",
         // firstName: "Firstname2",
