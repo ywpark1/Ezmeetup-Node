@@ -34,21 +34,20 @@ function sendVerificationEmail(user) {
   sgMail.setApiKey(process.env.SENDGRID_API_KEY);
   const msg = {
     to: user.email,
-    from: "no-reply@ezmeetup.com",
-    subject: "Confirm your account",
-    text:
-      "Thank you for using our application!. Please click this link to verify your account : \n",
+    from: "yeonwoopark.dev@gmail.com",
+    subject: "Confirm your account", // text:
+    //   "Thank you for using our application!. Please click this link to verify your account : \n",
     html:
-      "<a href='http://myvmlab.senecacollege.ca:6282/api/users/verify/" +
+      "<p>Thank you for using our application! This email is from PRJ666 EzMeetup project. Please click this link to verify your account : </p><a href='http://myvmlab.senecacollege.ca:6282/api/users/verify/" +
       token +
       "'>Activate account</a>"
-    // html:
-    //   "<a href='http://localhost:10034/api/users/verify/" +
-    //   token +
-    //   "'>Activate account</a>"
   };
+  // html:
+  //   "<a href='http://localhost:10034/api/users/verify/" +
+  //   token +
+  //   "'>Activate account</a>"
   //   console.log(process.env.SENDGRID_API_KEY);
-  //   console.log(msg);
+  console.log(msg);
   sgMail.send(msg);
 }
 
