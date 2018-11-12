@@ -237,16 +237,11 @@ exports.joinEvent = (req, res) => {
 exports.findAllEventsById = (req, res) => {
   UserEvent.findAll({
     where: { userId: req.params.userId },
-    attributes: ["userId"],
+    attributes: ["eventId"],
     include: [
       {
         model: Event,
-        attributes: [
-          "eventId",
-          "eventName",
-          "eventLocation",
-          "eventDescription"
-        ]
+        attributes: ["eventName", "eventLocation", "eventDescription"]
       }
     ]
   })
