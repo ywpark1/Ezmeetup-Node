@@ -1,6 +1,7 @@
 {
-    "dbConfig" : {
-        "password": "DEV_EZMEETUP_PW"
-    },
-    "jwtPrivateKey": "ezmeetup_jwtPrivateKey"
+  "dbConfig": {
+    "password": "DEV_EZMEETUP_PW"
+  },
+  "jwtPrivateKey": "ezmeetup_jwtPrivateKey",
+  "verifyPass": "ezmeetup_verifyPass"
 }

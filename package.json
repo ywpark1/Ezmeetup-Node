@@ -11,7 +11,7 @@
   "license": "ISC",
   "dependencies": {
     "@sendgrid/mail": "^6.3.1",
-    "apidoc": "^0.17.6",
+    "apidoc": "^0.17.7",
     "bcrypt": "^3.0.2",
     "compression": "^1.7.3",
     "config": "^2.0.1",
@@ -32,9 +32,9 @@
     "passport-local": "^1.0.0",
     "path": "^0.12.7",
     "pug": "^2.0.3",
-    "sequelize": "^4.41.1",
+    "sequelize": "^4.41.2",
     "sequelize-cli": "^4.1.1",
-    "showdown": "^1.8.7",
+    "showdown": "^1.9.0",
     "socket.io": "^2.1.1",
     "winston": "^3.1.0"
   },

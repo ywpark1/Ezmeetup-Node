@@ -30,25 +30,33 @@ function getOneUserWithCategories(userId) {
 
 function sendVerificationEmail(user) {
   const token = user.generateVerifyToken();
-  const sgMail = require("@sendgrid/mail");
-  sgMail.setApiKey(process.env.SENDGRID_API_KEY);
-  const msg = {
+  const nodemailer = require("nodemailer");
+
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: "ezmeetup.e@gmail.com",
+      pass: config.get("verifyPass")
+    }
+  });
+
+  const mailOptions = {
+    from: "ezmeetup.e@gmail.com",
     to: user.email,
-    from: "yeonwoopark.dev@gmail.com",
-    subject: "Confirm your account", // text:
-    //   "Thank you for using our application!. Please click this link to verify your account : \n",
+    subject: "[Ezmeetup] Confirm your account",
     html:
-      "<p>Thank you for using our application! This email is from PRJ666 EzMeetup project. Please click this link to verify your account : </p><a href='http://myvmlab.senecacollege.ca:6282/api/users/verify/" +
+      "<p>Thank you for using our application! This email is from <strong>PRJ666 EzMeetup</strong> project. Please click this link to verify your account : </p><a href='http://myvmlab.senecacollege.ca:6282/api/users/verify/" +
       token +
       "'>Activate account</a>"
   };
-  // html:
-  //   "<a href='http://localhost:10034/api/users/verify/" +
-  //   token +
-  //   "'>Activate account</a>"
-  //   console.log(process.env.SENDGRID_API_KEY);
-  console.log(msg);
-  sgMail.send(msg);
+
+  transporter.sendMail(mailOptions, function(error, info) {
+    if (error) {
+      console.log(error);
+    } else {
+      console.log("Email sent: " + info.response);
+    }
+  });
 }
 
 // Create new user
