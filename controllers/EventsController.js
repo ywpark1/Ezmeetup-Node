@@ -1,13 +1,12 @@
 const _ = require("lodash");
-// const jwt = require('jsonwebtoken');
 const db = require("../startup/dbconnection");
-// const config = require('config');
 const Op = require("sequelize").Op;
 const Event = db.events;
 const Category = db.categories;
 const EventCategory = db.eventCategories;
 const User = db.users;
 const UserCategory = db.userCategories;
+const UserEvent = db.userEvents;
 const EventImage = db.eventImages;
 
 function getOneEventWithCategories(eventId) {
@@ -75,14 +74,22 @@ exports.findAllWithCategories = (req, res) => {
       return EventCategory.findAll({
         where: { categoryId: { [Op.in]: categoryArr } },
         distinct: true
-        // group: "eventId"
       });
     })
     .then(eventCats => {
       const eventArr = eventCats.map(a => a.eventId);
 
+      return UserEvent.findAll({
+        where: { userId: req.params.userId },
+        attributes: ["eventId"]
+      }).then(events => {
+        const evts = events.map(a => a.eventId);
+        return eventArr.filter(x => evts.indexOf(x) < 0);
+      });
+    })
+    .then(filteredEvents => {
       return Event.findAll({
-        where: { id: { [Op.in]: eventArr } },
+        where: { id: { [Op.in]: filteredEvents } },
         include: [
           {
             model: EventCategory,
@@ -101,22 +108,13 @@ exports.findAllWithCategories = (req, res) => {
         ],
         distinct: true
       });
-      //   res.send(eventArr);
     })
-    .then(events => {
-      res.send(events);
+    .then(showEvents => {
+      res.send(showEvents);
     })
     .catch(err => {
       res.status(400).send(err.errors[0].message);
     });
-  //   res.send(userCategoriesArr);
-  //   Event.findAll()
-  //     .then(events => {
-  //       res.send(events);
-  //     })
-  //     .catch(err => {
-  //       res.status(400).send(err.errors[0].message);
-  //     });
 };
 
 // Create new event
@@ -128,12 +126,6 @@ exports.create = (req, res) => {
     eventCapacity: req.body.eventCapacity,
     eventDate: req.body.eventDate,
     userId: req.body.userId
-    // eventName: "Test Event 1",
-    // eventLocation: "Toronto, ON",
-    // eventDescription: "This is Test Event Description.",
-    // eventCapacity: 15,
-    // eventDate: "2018-11-12",
-    // userId: 1
   })
     .then(event => {
       const categoryArr = req.body.categoryIds.map(id => ({
@@ -195,7 +187,6 @@ exports.update = (req, res) => {
     })
     .then(event => {
       res.status(200).send(event);
-      // res.status(200).send("Updated successfully a event with id = " + id);
     })
     .catch(err => {
       res.status(400).send(err);
