@@ -125,7 +125,6 @@ exports.findById = (req, res) => {
 
 /**
  * TODOs for Update
- * Email changes
  * Password changes
  * others changes
  */
@@ -169,6 +168,28 @@ exports.update = (req, res) => {
       res.status(400).send(err);
     });
 };
+
+// exports.updatePassword = (req, res) => {
+//   const id = req.params.userId;
+
+//   User.findOne({ where: { id: id } })
+//     .then(user => {
+//       return user.update({
+//         email: user.email,
+//         password: req.body.password,
+//         firstName: user.firstName,
+//         lastName: user.lastName,
+//         phoneNumber: user.phoneNumber
+//       });
+//     })
+//     .then(user => {
+//       if (!user) res.status(404).send("User not found");
+//       res.status(200).send("Password Updated successfully!");
+//     })
+//     .catch(err => {
+//       res.status(400).send(err);
+//     });
+// };
 
 // Delete a User by Id
 exports.delete = (req, res) => {
@@ -240,6 +261,25 @@ exports.joinEvent = (req, res) => {
         res.status(400).send("Already Joined the event!");
       else res.status(400).send(err.errors[0].message);
     });
+};
+
+// Delete a User by Id
+exports.leaveEvent = (req, res) => {
+  const userId = req.params.userId;
+  const eventId = req.params.eventId;
+
+  UserEvent.destroy({ where: { userId: userId, eventId: eventId } }).then(
+    () => {
+      res
+        .status(200)
+        .send(
+          "User with id " +
+            userId +
+            " successfully left the event with id = " +
+            eventId
+        );
+    }
+  );
 };
 
 exports.findAllEventsById = (req, res) => {
