@@ -19,7 +19,8 @@ module.exports = (sequelize, Sequelize) => {
     phoneNumber: { type: Sequelize.STRING(40), allowNull: false },
     isAdmin: { type: Sequelize.BOOLEAN, defaultValue: 0 },
     loginStatus: { type: Sequelize.BOOLEAN, defaultValue: 0 },
-    isVerified: { type: Sequelize.BOOLEAN, defaultValue: 0 }
+    isVerified: { type: Sequelize.BOOLEAN, defaultValue: 0 },
+    deviceToken: { type: Sequelize.STRING, allowNull: true }
   };
 
   const User = sequelize.define("user", userSchema, {});

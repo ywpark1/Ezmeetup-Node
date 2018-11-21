@@ -28,11 +28,14 @@ passport.use(
   new localStrategy(
     {
       usernameField: "email",
-      passwordField: "password"
+      passwordField: "password",
+      passReqToCallback: true
     },
-    async (email, password, done) => {
+    async (req, email, password, done) => {
       try {
         const user = await User.findOne({ where: { email: email } });
+
+        // console.log(req.body.deviceToken);
 
         if (!user) {
           return done(null, false, { message: "Invalid email or password" });
@@ -44,7 +47,8 @@ passport.use(
         // }
 
         user.update({
-          loginStatus: true
+          loginStatus: true,
+          deviceToken: req.body.deviceToken
         });
 
         return done(null, user, { message: "Logged in Successfully" });
@@ -72,7 +76,7 @@ passport.use(
     try {
       const user = await User.findById(payload.id);
 
-      console.log(user);
+      //   console.log(user);
 
       if (!user) {
         return done(null, false);
