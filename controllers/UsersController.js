@@ -9,6 +9,7 @@ const Event = db.events;
 const UserEvent = db.userEvents;
 const UserCategory = db.userCategories;
 const Category = db.categories;
+const EventImage = db.eventImages;
 
 function getOneUserWithCategories(userId) {
   return User.findOne({
@@ -91,7 +92,7 @@ exports.create = (req, res) => {
       if (err.name === "SequelizeForeignKeyConstraintError") {
         res.status(400).send("User creator does not exist");
       }
-      res.status(400).send(err);
+      res.status(400).send(err.error[0].message);
     });
 };
 
@@ -203,7 +204,6 @@ exports.delete = (req, res) => {
 
 // Login method
 exports.login = (req, res, next) => {
-  console.log(req.user.userVerified());
   if (!req.user.userVerified()) {
     res.status(401).send("Please check your email to verify your account");
     return next();
@@ -290,6 +290,30 @@ exports.findAllEventsById = (req, res) => {
       {
         model: Event,
         attributes: ["eventName", "eventLocation", "eventDescription"]
+      }
+    ]
+  })
+    .then(events => {
+      res.send(events);
+    })
+    .catch(err => {
+      res.status(400).send(err.errors[0].message);
+    });
+};
+
+exports.findOneEventWithDetails = (req, res) => {
+  UserEvent.findAll({
+    where: { userId: req.params.userId },
+    attributes: ["eventId"],
+    include: [
+      {
+        model: Event,
+        include: [
+          {
+            model: EventImage,
+            attributes: ["image"]
+          }
+        ]
       }
     ]
   })

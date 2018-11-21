@@ -32,8 +32,13 @@ router.delete("/:userId", authJwt, userController.delete);
 
 // Events with User
 router.get("/:userId/events", authJwt, userController.findAllEventsById); // list of events user joined
+router.get(
+  "/:userId/events/details/:eventId",
+  authJwt,
+  userController.findOneEventWithDetails
+); // Get one joined event details
 router.put("/:userId/events/edit/:eventId", authJwt, eventController.update); // update event info if user is a event creator
 router.post("/:userId/events/join/:eventId", userController.joinEvent); // Join the event
-router.post("/:userId/events/leave/:eventId", userController.leaveEvent); // Join the event
+router.post("/:userId/events/leave/:eventId", userController.leaveEvent); // Leave the event
 
 module.exports = router;
