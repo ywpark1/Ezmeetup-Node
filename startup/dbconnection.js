@@ -10,6 +10,8 @@ const EventCategoryModel = require("../models/eventCategory");
 const UserCategoryModel = require("../models/userCategory");
 const EventImageModel = require("../models/eventImage");
 
+const ChatModel = require("../models/chat");
+
 const sequelize = new Sequelize(config.get("dbConfig"));
 const db = {};
 
@@ -24,6 +26,7 @@ db.categories = CategoryModel(sequelize, Sequelize);
 db.eventCategories = EventCategoryModel(sequelize, Sequelize);
 db.userCategories = UserCategoryModel(sequelize, Sequelize);
 db.eventImages = EventImageModel(sequelize, Sequelize);
+db.chats = ChatModel(sequelize, Sequelize);
 
 db.events.belongsTo(db.users, {
   foreignKey: { name: "userId", allowNull: false }
@@ -84,5 +87,23 @@ db.events.hasMany(db.eventImages, {
   foreignKey: "eventId",
   constraints: false
 });
+
+db.chats.belongsTo(db.events, {
+  foreignKey: { primaryKey: false, name: "eventId", allowNull: false }
+});
+db.events.hasMany(db.chats, {
+  foreignKey: "eventId",
+  constraints: false
+});
+
+db.chats.belongsTo(db.users, {
+  foreignKey: { primaryKey: false, name: "userId", allowNull: false }
+});
+db.users.hasMany(db.chats, {
+  foreignKey: "userId",
+  constraints: false
+});
+
+require("./dbInitialize")(db);
 
 module.exports = db;
