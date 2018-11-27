@@ -43,19 +43,27 @@ module.exports = function(db) {
             return db.events.bulkCreate([
               {
                 eventName: "Cineplex",
+                eventAddress1: "15460 Bayview Avenue",
+                eventCity: "Aurora",
+                eventProvince: "ON",
+                eventPostalCode: "L4G 7J1",
                 eventLocation: "15460 Bayview Avenue Aurora, ON, L4G 7J1",
                 eventDescription: "Watch a movie together!",
                 eventCapacity: 20,
-                eventDate: "2018-11-12",
+                eventDate: "2018-12-23",
                 userId: 1
               },
               {
                 eventName: "CNE",
+                eventAddress1: "210 Princes' Blvd",
+                eventCity: "Toronto",
+                eventProvince: "ON",
+                eventPostalCode: "M6K 3C3",
                 eventLocation: "210 Princes' Blvd, Toronto, ON M6K 3C3",
                 eventDescription:
                   "An annual event that takes place at Exhibition Place",
                 eventCapacity: 30,
-                eventDate: "2018-11-20",
+                eventDate: "2018-12-10",
                 userId: 1
               }
             ]);
@@ -79,31 +87,31 @@ module.exports = function(db) {
                 image:
                   "http://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Cineplex_logo.svg/500px-Cineplex_logo.svg.png"
               },
-              {
-                eventId: 1,
-                image:
-                  "https://mediafiles.cineplex.com/Attachments/NewItems/venom-595x326-EN_20181005144852_0.jpg"
-              },
-              {
-                eventId: 1,
-                image:
-                  "https://mediafiles.cineplex.com/Attachments/NewItems/astarisborn-595x326-EN_20181005144910_0.jpg"
-              },
+              //   {
+              //     eventId: 1,
+              //     image:
+              //       "https://mediafiles.cineplex.com/Attachments/NewItems/venom-595x326-EN_20181005144852_0.jpg"
+              //   },
+              //   {
+              //     eventId: 1,
+              //     image:
+              //       "https://mediafiles.cineplex.com/Attachments/NewItems/astarisborn-595x326-EN_20181005144910_0.jpg"
+              //   },
               {
                 eventId: 2,
                 image:
                   "https://theex.com/statcache/pthumb/images/galleries/skyride/skyride_1.fe2c857b.jpg"
-              },
-              {
-                eventId: 2,
-                image:
-                  "https://theex.com/statcache/pthumb/images/food/restaurants/ribfest_lg.ce9edee6.jpg"
-              },
-              {
-                eventId: 2,
-                image:
-                  "https://theex.com/statcache/pthumb/images/food/craft_beer_fest_2015.ce9edee6.jpg"
               }
+              //   {
+              //     eventId: 2,
+              //     image:
+              //       "https://theex.com/statcache/pthumb/images/food/restaurants/ribfest_lg.ce9edee6.jpg"
+              //   },
+              //   {
+              //     eventId: 2,
+              //     image:
+              //       "https://theex.com/statcache/pthumb/images/food/craft_beer_fest_2015.ce9edee6.jpg"
+              //   }
             ]);
           })
           .then(() => {

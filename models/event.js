@@ -16,8 +16,28 @@ module.exports = (sequelize, Sequelize) => {
       type: Sequelize.STRING(300),
       allowNull: false
     },
+    eventAddress1: {
+      type: Sequelize.STRING(100),
+      allowNull: false
+    },
+    eventAddress2: {
+      type: Sequelize.STRING(100),
+      allowNull: true
+    },
+    eventCity: {
+      type: Sequelize.STRING(50),
+      allowNull: false
+    },
+    eventProvince: {
+      type: Sequelize.STRING(20),
+      allowNull: false
+    },
+    eventPostalCode: {
+      type: Sequelize.STRING(10),
+      allowNull: false
+    },
     eventLocation: {
-      type: Sequelize.STRING(200),
+      type: Sequelize.STRING(300),
       allowNull: true
     },
     eventDescription: {
