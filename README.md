@@ -81,32 +81,5 @@ Change the DB settings under config directory.
 
 ## TODOs
 
-- apiDoc
-
-- Log Error
-
-- Check all queries before creating the table in DB
-
-- Add user roles to User
-
-- Authenticate User(JWT and Passport)
-
-- Form Validator
-
-- Models :
-  - User
-  - Event
-  - Friend
-  - Chat(Takes long time)
-- Controller :
-
-  - User
-  - Event
-  - Friend
-  - Chat(Takes long time)
-
-- API with requests :
-  - User
-  - Event
-  - Friend
-  - Chat(Takes long time)
+- Forgot Password
+- Event update
