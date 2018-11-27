@@ -52,6 +52,19 @@ function getAllEventsWithCategories() {
   });
 }
 
+function getAllUsersInEvent(eventId) {
+  return Event.findOne({
+    where: { id: eventId },
+    attributes: ["id", "eventName", "eventCapacity"],
+    include: [
+      {
+        model: UserEvent,
+        attributes: ["userId"]
+      }
+    ]
+  });
+}
+
 // Display list of all Events.
 exports.findAll = (req, res) => {
   getAllEventsWithCategories()
@@ -119,24 +132,48 @@ exports.findAllWithCategories = (req, res) => {
 
 // Create new event
 exports.create = (req, res) => {
+  const newEvent = JSON.parse(req.body.request);
+  const fullAddress =
+    newEvent.eventAddress1 +
+    ", " +
+    (newEvent.eventAddress2 || "") +
+    ", " +
+    newEvent.eventCity +
+    ", " +
+    newEvent.eventProvince +
+    " " +
+    newEvent.eventPostalCode;
   Event.create({
-    eventName: req.body.eventName,
-    eventLocation: req.body.eventLocation,
-    eventDescription: req.body.eventDescription,
-    eventCapacity: req.body.eventCapacity,
-    eventDate: req.body.eventDate,
-    userId: req.body.userId
+    eventName: newEvent.eventName,
+    eventAddress1: newEvent.eventAddress1,
+    eventAddress2: newEvent.eventAddress2,
+    eventCity: newEvent.eventCity,
+    eventProvince: newEvent.eventProvince,
+    eventPostalCode: newEvent.eventPostalCode,
+    eventLocation: fullAddress,
+    eventDescription: newEvent.eventDescription,
+    eventCapacity: newEvent.eventCapacity || 0,
+    eventDate: newEvent.eventDate,
+    userId: newEvent.userId
   })
     .then(event => {
-      const categoryArr = req.body.categoryIds.map(id => ({
+      const categoryArr = newEvent.categoryIds.map(id => ({
         eventId: event.id,
         categoryId: id
       }));
       EventCategory.bulkCreate(categoryArr).then(() => {
         getOneEventWithCategories(event.id).then(event => {
-          res.status(201).send(event);
+          let filePath = req.protocol + "://" + req.get("host") + "/";
+          filePath +=
+            req.file !== undefined ? req.file.path : "public/logo.jpg";
+
+          EventImage.create({ eventId: event.id, image: filePath });
+
+          return event;
         });
       });
+
+      res.status(201).send(event);
     })
     .catch(err => {
       if (err.name === "SequelizeForeignKeyConstraintError") {
@@ -154,6 +191,21 @@ exports.findById = (req, res) => {
         res.status(404).send("Event not found");
       } else {
         res.status(200).send(event);
+      }
+    })
+    .catch(err => {
+      res.status(400).send(err);
+    });
+};
+
+// Find all users in Event
+exports.findAllUsersinEvent = (req, res) => {
+  getAllUsersInEvent(req.params.eventId)
+    .then(users => {
+      if (!users) {
+        res.status(404).send("users not found");
+      } else {
+        res.status(200).send(users);
       }
     })
     .catch(err => {
