@@ -289,7 +289,12 @@ exports.findAllEventsById = (req, res) => {
     include: [
       {
         model: Event,
-        attributes: ["eventName", "eventLocation", "eventDescription"]
+        attributes: [
+          "eventName",
+          "eventLocation",
+          "eventDescription",
+          "eventDate"
+        ]
       }
     ]
   })
