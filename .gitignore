@@ -1,5 +1,8 @@
 node_modules/
 logs/*
+ezmeetup-8cd2b-firebase-adminsdk-xy1bc-f57d58dfc5.json
 
+public/
 
 sendgrid.env
+testRoutes.sh
