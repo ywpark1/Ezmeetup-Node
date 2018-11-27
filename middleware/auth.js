@@ -74,9 +74,7 @@ jwtOptions.secretOrKey = config.get("jwtPrivateKey");
 passport.use(
   new JwtStrategy(jwtOptions, async (payload, done) => {
     try {
-      const user = await User.findById(payload.id);
-
-      //   console.log(user);
+      const user = await User.findByPk(payload.id);
 
       if (!user) {
         return done(null, false);
