@@ -42,12 +42,24 @@ module.exports = function(db) {
           .then(userCat => {
             return db.events.bulkCreate([
               {
+                eventName: "PRJ666 Final Presentation",
+                eventAddress1: "70 The Pond Road",
+                eventCity: "Toronto",
+                eventProvince: "ON",
+                eventPostalCode: "L4G 7J1",
+                eventLocation: "70 The Pond Road, Toronto, ON L4G 7J1",
+                eventDescription: "We will present our final projects.",
+                eventCapacity: 0,
+                eventDate: "2018-12-04",
+                userId: 1
+              },
+              {
                 eventName: "Cineplex",
                 eventAddress1: "15460 Bayview Avenue",
                 eventCity: "Aurora",
                 eventProvince: "ON",
                 eventPostalCode: "L4G 7J1",
-                eventLocation: "15460 Bayview Avenue Aurora, ON, L4G 7J1",
+                eventLocation: "15460 Bayview Avenue Aurora, ON L4G 7J1",
                 eventDescription: "Watch a movie together!",
                 eventCapacity: 20,
                 eventDate: "2018-12-23",
@@ -84,34 +96,18 @@ module.exports = function(db) {
             return db.eventImages.bulkCreate([
               {
                 eventId: 1,
-                image:
-                  "http://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Cineplex_logo.svg/500px-Cineplex_logo.svg.png"
+                image: "http://myvmlab.senecacollege.ca:6282/public/logo.jpg"
               },
-              //   {
-              //     eventId: 1,
-              //     image:
-              //       "https://mediafiles.cineplex.com/Attachments/NewItems/venom-595x326-EN_20181005144852_0.jpg"
-              //   },
-              //   {
-              //     eventId: 1,
-              //     image:
-              //       "https://mediafiles.cineplex.com/Attachments/NewItems/astarisborn-595x326-EN_20181005144910_0.jpg"
-              //   },
               {
                 eventId: 2,
                 image:
+                  "http://upload.wikimedia.org/wikipedia/commons/thumb/b/b6/Cineplex_logo.svg/500px-Cineplex_logo.svg.png"
+              },
+              {
+                eventId: 3,
+                image:
                   "https://theex.com/statcache/pthumb/images/galleries/skyride/skyride_1.fe2c857b.jpg"
               }
-              //   {
-              //     eventId: 2,
-              //     image:
-              //       "https://theex.com/statcache/pthumb/images/food/restaurants/ribfest_lg.ce9edee6.jpg"
-              //   },
-              //   {
-              //     eventId: 2,
-              //     image:
-              //       "https://theex.com/statcache/pthumb/images/food/craft_beer_fest_2015.ce9edee6.jpg"
-              //   }
             ]);
           })
           .then(() => {
