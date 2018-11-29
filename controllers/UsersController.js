@@ -306,6 +306,32 @@ exports.findAllEventsById = (req, res) => {
     });
 };
 
+exports.findAllEventsUserCreated = (req, res) => {
+  Event.findAll({
+    where: { userId: req.params.userId },
+    attributes: [
+      "id",
+      "eventName",
+      "eventAddress1",
+      "eventAddress2",
+      "eventCity",
+      "eventProvince",
+      "eventPostalCode",
+      "eventLocation",
+      "eventDescription",
+      "eventCapacity",
+      "eventDate",
+      "userId"
+    ]
+  })
+    .then(events => {
+      res.send(events);
+    })
+    .catch(err => {
+      res.status(400).send(err.errors[0].message);
+    });
+};
+
 exports.findOneEventWithDetails = (req, res) => {
   UserEvent.findAll({
     where: { userId: req.params.userId },
