@@ -218,6 +218,19 @@ exports.update = (req, res) => {
   const userId = req.params.userId;
   const eventId = req.params.eventId;
 
+  const newEvent = JSON.parse(req.body.request);
+  //   res.status(200).send(newEvent);
+  const fullAddress =
+    newEvent.eventAddress1 +
+    ", " +
+    (newEvent.eventAddress2 || "") +
+    ", " +
+    newEvent.eventCity +
+    ", " +
+    newEvent.eventProvince +
+    " " +
+    newEvent.eventPostalCode;
+
   Event.findOne({
     where: {
       id: eventId,
@@ -230,15 +243,43 @@ exports.update = (req, res) => {
       }
 
       return event.update({
-        eventName: req.body.eventName,
-        eventLocation: req.body.eventLocation,
-        eventDescription: req.body.eventDescription,
-        eventCapacity: req.body.eventCapacity,
-        eventDate: req.body.eventDate
+        eventName: newEvent.eventName || event.eventName,
+        eventAddress1: newEvent.eventAddress1 || event.eventAddress1,
+        eventAddress2: newEvent.eventAddress2 || event.eventAddress2,
+        eventCity: newEvent.eventCity || event.eventCity,
+        eventProvince: newEvent.eventProvince || event.eventProvince,
+        eventPostalCode: newEvent.eventPostalCode || event.eventPostalCode,
+        eventLocation: fullAddress,
+        eventDescription: newEvent.eventDescription || event.eventDescription,
+        eventCapacity: newEvent.eventCapacity || 0,
+        eventDate: newEvent.eventDate || event.eventDate,
+        userId: newEvent.userId
       });
     })
     .then(event => {
-      res.status(200).send(event);
+      const categoryArr = newEvent.categoryIds.map(id => ({
+        eventId: event.id,
+        categoryId: id
+      }));
+
+      EventCategory.destroy({
+        where: { eventId: event.id }
+      }).then(() => {
+        EventCategory.bulkCreate(categoryArr).then(() => {
+          let filePath = req.protocol + "://" + req.get("host") + "/";
+          filePath +=
+            req.file !== undefined ? req.file.path : "public/logo.jpg";
+          EventImage.findOne({
+            where: { eventId: event.id }
+          }).then(eventImage => {
+            eventImage.update({
+              image: filePath
+            });
+          });
+        });
+      });
+      res.statusMessage = "Successfully Updated";
+      res.status(204).send();
     })
     .catch(err => {
       res.status(400).send(err);

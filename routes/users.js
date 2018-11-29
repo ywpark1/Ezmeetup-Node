@@ -12,7 +12,24 @@ const eventController = require("../controllers/EventsController");
 const { authLocal, authJwt } = require("../middleware/auth");
 const admin = require("../middleware/admin");
 
-const User = require("../startup/dbconnection").users;
+// Handling image
+const multer = require("multer");
+const storage = multer.diskStorage({
+  destination: function(req, file, cb) {
+    cb(null, "./public");
+  },
+  filename: function(req, file, cb) {
+    cb(
+      null,
+      moment().format("YYYY_MM_DD_HH_mm_ss") +
+        "-" +
+        file.originalname.replace(/ /g, "-")
+    );
+  }
+});
+const upload = multer({ storage: storage });
+
+const moment = require("moment");
 
 // Users
 router.get("/", [authJwt, admin], userController.findAll);
@@ -37,8 +54,23 @@ router.get(
   authJwt,
   userController.findOneEventWithDetails
 ); // Get one joined event details
-router.put("/:userId/events/edit/:eventId", authJwt, eventController.update); // update event info if user is a event creator
-router.post("/:userId/events/join/:eventId", userController.joinEvent); // Join the event
-router.post("/:userId/events/leave/:eventId", userController.leaveEvent); // Leave the event
+
+router.get(
+  "/:userId/events/created",
+  authJwt,
+  userController.findAllEventsUserCreated
+); // display the list of events current user created
+router.put(
+  "/:userId/events/edit/:eventId",
+  authJwt,
+  upload.single("eventImage"),
+  eventController.update
+); // update event info if user is a event creator
+router.post("/:userId/events/join/:eventId", authJwt, userController.joinEvent); // Join the event
+router.post(
+  "/:userId/events/leave/:eventId",
+  authJwt,
+  userController.leaveEvent
+); // Leave the event
 
 module.exports = router;
