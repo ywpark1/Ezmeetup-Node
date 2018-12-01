@@ -88,6 +88,10 @@ module.exports = function(db) {
               },
               {
                 eventId: 2,
+                categoryId: 6
+              },
+              {
+                eventId: 3,
                 categoryId: 2
               }
             ]);

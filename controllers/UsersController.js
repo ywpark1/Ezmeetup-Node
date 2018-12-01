@@ -9,6 +9,7 @@ const Event = db.events;
 const UserEvent = db.userEvents;
 const UserCategory = db.userCategories;
 const Category = db.categories;
+const EventCategory = db.eventCategories;
 const EventImage = db.eventImages;
 
 function getOneUserWithCategories(userId) {
@@ -322,6 +323,22 @@ exports.findAllEventsUserCreated = (req, res) => {
       "eventCapacity",
       "eventDate",
       "userId"
+    ],
+    include: [
+      {
+        model: EventCategory,
+        attributes: ["categoryId"],
+        include: [
+          {
+            model: Category,
+            attributes: ["categoryName"]
+          }
+        ]
+      },
+      {
+        model: EventImage,
+        attributes: ["image"]
+      }
     ]
   })
     .then(events => {
