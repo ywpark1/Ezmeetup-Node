@@ -101,8 +101,21 @@ exports.findAllWithCategories = (req, res) => {
       });
     })
     .then(filteredEvents => {
+      const curDate = new Date(
+        new Date().getFullYear(),
+        new Date().getMonth(),
+        new Date().getDate()
+      );
+      curDate.setHours(curDate.getHours() - 5);
+
+      console.log(curDate);
       return Event.findAll({
-        where: { id: { [Op.in]: filteredEvents } },
+        where: {
+          id: { [Op.in]: filteredEvents },
+          eventDate: {
+            [Op.gte]: curDate
+          }
+        },
         include: [
           {
             model: EventCategory,
