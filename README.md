@@ -1,4 +1,4 @@
-# [PRJ666 - Ezmeetup](https://github.com/ywpark1/Ezmeetup-Node)
+# [Ezmeetup - Node.js](https://github.com/ywpark1/Ezmeetup-Node)
 
 This is Ezmeetup project repository for PRJ666 course at Seneca college.
 
