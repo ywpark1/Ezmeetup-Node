@@ -269,13 +269,15 @@ exports.update = (req, res) => {
           let filePath = req.protocol + "://" + req.get("host") + "/";
           filePath +=
             req.file !== undefined ? req.file.path : "public/logo.jpg";
-          EventImage.findOne({
-            where: { eventId: event.id }
-          }).then(eventImage => {
-            eventImage.update({
-              image: filePath
+          if (req.file !== undefined) {
+            EventImage.findOne({
+              where: { eventId: event.id }
+            }).then(eventImage => {
+              eventImage.update({
+                image: filePath
+              });
             });
-          });
+          }
         });
       });
       res.statusMessage = "Successfully Updated";
