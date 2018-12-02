@@ -1,4 +1,4 @@
-# PRJ666 - Ezmeetup
+# [PRJ666 - Ezmeetup](https://github.com/ywpark1/Ezmeetup-Node)
 
 This is Ezmeetup project repository for PRJ666 course at Seneca college.
 
@@ -78,8 +78,3 @@ Change the DB settings under config directory.
 - Derrick Leung (Group Leader)
 - Sina Kamali
 - Yeonwoo Park
-
-## TODOs
-
-- Forgot Password
-- Event update
