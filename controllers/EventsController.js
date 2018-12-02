@@ -102,11 +102,13 @@ exports.findAllWithCategories = (req, res) => {
     })
     .then(filteredEvents => {
       const curDate = new Date(
-        new Date().getFullYear(),
-        new Date().getMonth(),
-        new Date().getDate()
+        Date.UTC(
+          new Date().getFullYear(),
+          new Date().getMonth(),
+          new Date().getDate()
+        )
       );
-      curDate.setHours(curDate.getHours() - 5);
+      //   curDate.setHours(curDate.getHours() - 5);
 
       console.log(curDate);
       return Event.findAll({
