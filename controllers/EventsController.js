@@ -113,10 +113,10 @@ exports.findAllWithCategories = (req, res) => {
       console.log(curDate);
       return Event.findAll({
         where: {
-          id: { [Op.in]: filteredEvents }
-          //   eventDate: {
-          //     [Op.gte]: curDate
-          //   }
+          id: { [Op.in]: filteredEvents },
+          eventDate: {
+            [Op.gte]: curDate
+          }
         },
         include: [
           {
