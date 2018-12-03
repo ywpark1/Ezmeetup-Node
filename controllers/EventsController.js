@@ -184,10 +184,24 @@ exports.create = (req, res) => {
 
           EventImage.create({ eventId: event.id, image: filePath });
 
-          return event;
+          //   return event;
         });
       });
 
+      return event;
+
+      //   res.status(201).send(event);
+    })
+    .then(event => {
+      console.log(event);
+      UserEvent.create({
+        userId: event.userId,
+        eventId: event.id
+      });
+
+      return event;
+    })
+    .then(event => {
       res.status(201).send(event);
     })
     .catch(err => {
