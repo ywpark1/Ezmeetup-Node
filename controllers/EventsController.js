@@ -9,6 +9,8 @@ const UserCategory = db.userCategories;
 const UserEvent = db.userEvents;
 const EventImage = db.eventImages;
 
+const chatController = require("./ChatsController");
+
 function getOneEventWithCategories(eventId) {
   return Event.findOne({
     where: { id: eventId },
@@ -317,13 +319,51 @@ exports.update = (req, res) => {
     });
 };
 
-// Delete a User by Id
+// Delete an Event by Id
 exports.delete = (req, res) => {
   const userId = req.params.userId;
   const eventId = req.params.eventId;
-  Event.destroy({
-    where: { id: eventId, userId: userId }
-  }).then(() => {
-    res.status(200).send("deleted successfully a User with id = " + id);
+
+  UserEvent.count({ where: { eventId: eventId } }).then(c => {
+    console.log("There are " + c + " users in the event " + eventId);
+    // if (c === 1) {
+    console.log("Deleting the event " + eventId);
+    console.log("Deleting Category");
+    EventCategory.destroy({
+      where: { eventId: eventId }
+    })
+      .then(affectedRows => {
+        console.log("Deleting Image");
+        return EventImage.destroy({
+          where: { eventId: eventId }
+        });
+      })
+      .then(affectedRows => {
+        console.log("Deleting Chat");
+        return chatController.delete(eventId);
+      })
+      .then(affectedRows => {
+        console.log("Deleting UserEvent");
+        return UserEvent.destroy({
+          where: { eventId: eventId }
+        });
+      })
+      .then(affectedRows => {
+        console.log("Deleting Event");
+        return Event.destroy({
+          where: { id: eventId, userId: userId }
+        });
+      })
+      .then(() => {
+        res
+          .status(200)
+          .send("deleted successfully an Event with id = " + eventId);
+      })
+      .catch(err => {
+        res.status(400).send(err);
+      });
+    // } else {
+    //   res.status(400).send("You cannot delete the event");
+    // }
   });
 };

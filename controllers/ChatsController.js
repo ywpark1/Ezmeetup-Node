@@ -27,6 +27,10 @@ exports.getAllByEventId = (req, res) => {
     });
 };
 
+exports.delete = eventId => {
+  return Chat.destroy({ where: { eventId: eventId } });
+};
+
 // Create new event
 exports.create = (req, res) => {
   Chat.create({

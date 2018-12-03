@@ -73,4 +73,10 @@ router.post(
   userController.leaveEvent
 ); // Leave the event
 
+router.delete(
+  "/:userId/events/delete/:eventId",
+  authJwt,
+  eventController.delete
+);
+
 module.exports = router;
